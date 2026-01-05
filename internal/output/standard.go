@@ -36,19 +36,19 @@ func formatDetailLabel(key string) string {
 func RenderWarnings(warnings []string, colorEnabled bool) {
 	if len(warnings) == 0 {
 		if colorEnabled {
-			fmt.Printf("%sNo warnings.%s\n", colorGreen, colorReset)
+			fmt.Printf("%s无警告.%s\n", colorGreen, colorReset)
 		} else {
-			fmt.Println("No warnings.")
+			fmt.Println("无警告.")
 		}
 		return
 	}
 	if colorEnabled {
-		fmt.Printf("%sWarnings%s:\n", colorRed, colorReset)
+		fmt.Printf("%s警告%s:\n", colorRed, colorReset)
 		for _, w := range warnings {
 			fmt.Printf("  • %s\n", w)
 		}
 	} else {
-		fmt.Println("Warnings:")
+		fmt.Println("警告:")
 		for _, w := range warnings {
 			fmt.Printf("  • %s\n", w)
 		}
@@ -62,17 +62,17 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 		target = r.Ancestry[len(r.Ancestry)-1].Command
 	}
 	if colorEnabled {
-		fmt.Printf("%sTarget%s      : %s\n\n", colorBlue, colorReset, target)
+		fmt.Printf("%s目标%s      : %s\n\n", colorBlue, colorReset, target)
 	} else {
-		fmt.Printf("Target      : %s\n\n", target)
+		fmt.Printf("目标      : %s\n\n", target)
 	}
 
 	// Process
 	var proc = r.Ancestry[len(r.Ancestry)-1]
 	if colorEnabled {
-		fmt.Printf("%sProcess%s     : %s (%spid %d%s)", colorBlue, colorReset, proc.Command, colorBold, proc.PID, colorReset)
+		fmt.Printf("%s处理中·%s     : %s (%spid %d%s)", colorBlue, colorReset, proc.Command, colorBold, proc.PID, colorReset)
 	} else {
-		fmt.Printf("Process     : %s (pid %d)", proc.Command, proc.PID)
+		fmt.Printf("处理中     : %s (pid %d)", proc.Command, proc.PID)
 	}
 	// Health status
 	if proc.Health != "" && proc.Health != "healthy" {
@@ -95,40 +95,40 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 	fmt.Println("")
 	if proc.User != "" && proc.User != "unknown" {
 		if colorEnabled {
-			fmt.Printf("%sUser%s        : %s\n", colorCyan, colorReset, proc.User)
+			fmt.Printf("%s用户%s        : %s\n", colorCyan, colorReset, proc.User)
 		} else {
-			fmt.Printf("User        : %s\n", proc.User)
+			fmt.Printf("用户        : %s\n", proc.User)
 		}
 	}
 
 	// Container
 	if proc.Container != "" {
 		if colorEnabled {
-			fmt.Printf("%sContainer%s   : %s\n", colorBlue, colorReset, proc.Container)
+			fmt.Printf("%s容器%s   : %s\n", colorBlue, colorReset, proc.Container)
 		} else {
-			fmt.Printf("Container   : %s\n", proc.Container)
+			fmt.Printf("容器   : %s\n", proc.Container)
 		}
 	}
 	// Service
 	if proc.Service != "" {
 		if colorEnabled {
-			fmt.Printf("%sService%s     : %s\n", colorBlue, colorReset, proc.Service)
+			fmt.Printf("%s服务%s     : %s\n", colorBlue, colorReset, proc.Service)
 		} else {
-			fmt.Printf("Service     : %s\n", proc.Service)
+			fmt.Printf("服务     : %s\n", proc.Service)
 		}
 	}
 
 	if proc.Cmdline != "" {
 		if colorEnabled {
-			fmt.Printf("%sCommand%s     : %s\n", colorGreen, colorReset, proc.Cmdline)
+			fmt.Printf("%s命令%s     : %s\n", colorGreen, colorReset, proc.Cmdline)
 		} else {
-			fmt.Printf("Command     : %s\n", proc.Cmdline)
+			fmt.Printf("命令     : %s\n", proc.Cmdline)
 		}
 	} else {
 		if colorEnabled {
-			fmt.Printf("%sCommand%s     : %s\n", colorGreen, colorReset, proc.Command)
+			fmt.Printf("%s命令%s     : %s\n", colorGreen, colorReset, proc.Command)
 		} else {
-			fmt.Printf("Command     : %s\n", proc.Command)
+			fmt.Printf("命令     : %s\n", proc.Command)
 		}
 	}
 	// Format as: 2 days ago (Mon 2025-02-02 11:42:10 +0530)
@@ -157,36 +157,36 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 	}
 	dtStr := startedAt.Format("Mon 2006-01-02 15:04:05 -07:00")
 	if colorEnabled {
-		fmt.Printf("%sStarted%s     : %s (%s)\n", colorMagenta, colorReset, rel, dtStr)
+		fmt.Printf("%s启动%s     : %s (%s)\n", colorMagenta, colorReset, rel, dtStr)
 	} else {
-		fmt.Printf("Started     : %s (%s)\n", rel, dtStr)
+		fmt.Printf("启动     : %s (%s)\n", rel, dtStr)
 	}
 
 	// Restart count
 	if r.RestartCount > 0 {
 		if colorEnabled {
-			fmt.Printf("%sRestarts%s    : %d\n", colorDimYellow, colorReset, r.RestartCount)
+			fmt.Printf("%s重新启动%s    : %d\n", colorDimYellow, colorReset, r.RestartCount)
 		} else {
-			fmt.Printf("Restarts    : %d\n", r.RestartCount)
+			fmt.Printf("重新启动    : %d\n", r.RestartCount)
 		}
 	}
 
 	// Why It Exists (short chain)
 	if colorEnabled {
-		fmt.Printf("\n%sWhy It Exists%s :\n  ", colorMagenta, colorReset)
+		fmt.Printf("\n%s为何存在%s :\n  ", colorMagenta, colorReset)
 		for i, p := range r.Ancestry {
 			name := p.Command
 			if name == "" && p.Cmdline != "" {
 				name = p.Cmdline
 			}
-			fmt.Printf("%s (%spid %d%s)", name, colorBold, p.PID, colorReset)
+			fmt.Printf("%s (%s进程pid %d%s)", name, colorBold, p.PID, colorReset)
 			if i < len(r.Ancestry)-1 {
 				fmt.Printf(" %s\u2192%s ", colorMagenta, colorReset)
 			}
 		}
 		fmt.Print("\n\n")
 	} else {
-		fmt.Printf("\nWhy It Exists :\n  ")
+		fmt.Printf("\n为何存在 :\n  ")
 		for i, p := range r.Ancestry {
 			name := p.Command
 			if name == "" && p.Cmdline != "" {
@@ -204,15 +204,15 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 	sourceLabel := string(r.Source.Type)
 	if colorEnabled {
 		if r.Source.Name != "" && r.Source.Name != sourceLabel {
-			fmt.Printf("%sSource%s      : %s (%s)\n", colorCyan, colorReset, r.Source.Name, sourceLabel)
+			fmt.Printf("%s源代码%s      : %s (%s)\n", colorCyan, colorReset, r.Source.Name, sourceLabel)
 		} else {
-			fmt.Printf("%sSource%s      : %s\n", colorCyan, colorReset, sourceLabel)
+			fmt.Printf("%s源代码%s      : %s\n", colorCyan, colorReset, sourceLabel)
 		}
 	} else {
 		if r.Source.Name != "" && r.Source.Name != sourceLabel {
-			fmt.Printf("Source      : %s (%s)\n", r.Source.Name, sourceLabel)
+			fmt.Printf("源代码      : %s (%s)\n", r.Source.Name, sourceLabel)
 		} else {
-			fmt.Printf("Source      : %s\n", sourceLabel)
+			fmt.Printf("源代码      : %s\n", sourceLabel)
 		}
 	}
 
@@ -235,7 +235,7 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 	// Context group
 	if colorEnabled {
 		if proc.WorkingDir != "" {
-			fmt.Printf("\n%sWorking Dir%s : %s\n", colorGreen, colorReset, proc.WorkingDir)
+			fmt.Printf("\n%s工作目录%s : %s\n", colorGreen, colorReset, proc.WorkingDir)
 		}
 		if proc.GitRepo != "" {
 			if proc.GitBranch != "" {
@@ -246,7 +246,7 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 		}
 	} else {
 		if proc.WorkingDir != "" {
-			fmt.Printf("\nWorking Dir : %s\n", proc.WorkingDir)
+			fmt.Printf("\n工作目录 : %s\n", proc.WorkingDir)
 		}
 		if proc.GitRepo != "" {
 			if proc.GitBranch != "" {
@@ -265,13 +265,13 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 			if addr != "" && port > 0 {
 				if colorEnabled {
 					if i == 0 {
-						fmt.Printf("%sListening%s   : %s:%d\n", colorGreen, colorReset, addr, port)
+						fmt.Printf("%s监听端口%s   : %s:%d\n", colorGreen, colorReset, addr, port)
 					} else {
 						fmt.Printf("              %s:%d\n", addr, port)
 					}
 				} else {
 					if i == 0 {
-						fmt.Printf("Listening   : %s:%d\n", addr, port)
+						fmt.Printf("监听端口   : %s:%d\n", addr, port)
 					} else {
 						fmt.Printf("              %s:%d\n", addr, port)
 					}
@@ -283,7 +283,7 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 	// Socket state (for port queries)
 	if r.SocketInfo != nil {
 		if colorEnabled {
-			fmt.Printf("%sSocket%s      : %s\n", colorCyan, colorReset, r.SocketInfo.State)
+			fmt.Printf("%s套接字%s      : %s\n", colorCyan, colorReset, r.SocketInfo.State)
 			if r.SocketInfo.Explanation != "" {
 				fmt.Printf("              %s\n", r.SocketInfo.Explanation)
 			}
@@ -291,7 +291,7 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 				fmt.Printf("              %s%s%s\n", colorDimYellow, r.SocketInfo.Workaround, colorReset)
 			}
 		} else {
-			fmt.Printf("Socket      : %s\n", r.SocketInfo.State)
+			fmt.Printf("套接字      : %s\n", r.SocketInfo.State)
 			if r.SocketInfo.Explanation != "" {
 				fmt.Printf("              %s\n", r.SocketInfo.Explanation)
 			}
@@ -305,16 +305,16 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 	if r.ResourceContext != nil {
 		if r.ResourceContext.PreventsSleep {
 			if colorEnabled {
-				fmt.Printf("%sEnergy%s      : %sPreventing system sleep%s\n", colorRed, colorReset, colorDimYellow, colorReset)
+				fmt.Printf("%s能耗%s      : %sPreventing system sleep%s\n", colorRed, colorReset, colorDimYellow, colorReset)
 			} else {
-				fmt.Printf("Energy      : Preventing system sleep\n")
+				fmt.Printf("能耗      : Preventing system sleep\n")
 			}
 		}
 		if r.ResourceContext.ThermalState != "" {
 			if colorEnabled {
-				fmt.Printf("%sThermal%s     : %s%s%s\n", colorRed, colorReset, colorDimYellow, r.ResourceContext.ThermalState, colorReset)
+				fmt.Printf("%s散热状态%s     : %s%s%s\n", colorRed, colorReset, colorDimYellow, r.ResourceContext.ThermalState, colorReset)
 			} else {
-				fmt.Printf("Thermal     : %s\n", r.ResourceContext.ThermalState)
+				fmt.Printf("散热状态     : %s\n", r.ResourceContext.ThermalState)
 			}
 		}
 	}
@@ -325,12 +325,12 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 			usagePercent := float64(r.FileContext.OpenFiles) / float64(r.FileContext.FileLimit) * 100
 			if colorEnabled {
 				if usagePercent > 80 {
-					fmt.Printf("%sOpen Files%s  : %s%d of %d (%.0f%%)%s\n", colorRed, colorReset, colorDimYellow, r.FileContext.OpenFiles, r.FileContext.FileLimit, usagePercent, colorReset)
+					fmt.Printf("%s打开文件%s  : %s%d of %d (%.0f%%)%s\n", colorRed, colorReset, colorDimYellow, r.FileContext.OpenFiles, r.FileContext.FileLimit, usagePercent, colorReset)
 				} else {
-					fmt.Printf("%sOpen Files%s  : %d of %d (%.0f%%)\n", colorCyan, colorReset, r.FileContext.OpenFiles, r.FileContext.FileLimit, usagePercent)
+					fmt.Printf("%s打开文件%s  : %d of %d (%.0f%%)\n", colorCyan, colorReset, r.FileContext.OpenFiles, r.FileContext.FileLimit, usagePercent)
 				}
 			} else {
-				fmt.Printf("Open Files  : %d of %d (%.0f%%)\n", r.FileContext.OpenFiles, r.FileContext.FileLimit, usagePercent)
+				fmt.Printf("打开文件  : %d of %d (%.0f%%)\n", r.FileContext.OpenFiles, r.FileContext.FileLimit, usagePercent)
 			}
 		}
 		if len(r.FileContext.LockedFiles) > 0 {
@@ -351,12 +351,12 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 	// Warnings
 	if len(r.Warnings) > 0 {
 		if colorEnabled {
-			fmt.Printf("\n%sWarnings%s    :\n", colorRed, colorReset)
+			fmt.Printf("\n%s警告%s    :\n", colorRed, colorReset)
 			for _, w := range r.Warnings {
 				fmt.Printf("  • %s\n", w)
 			}
 		} else {
-			fmt.Println("\nWarnings    :")
+			fmt.Println("\n警告    :")
 			for _, w := range r.Warnings {
 				fmt.Printf("  • %s\n", w)
 			}

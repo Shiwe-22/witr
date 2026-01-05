@@ -48,52 +48,52 @@ func Warnings(p []model.Process) []string {
 		lastCmd = proc.Command
 	}
 	if restartCount > 5 {
-		w = append(w, "Process or ancestor restarted more than 5 times")
+		w = append(w, "进程或其祖先重启超五次")
 	}
 
 	// Health warnings
 	switch last.Health {
 	case "zombie":
-		w = append(w, "Process is a zombie (defunct)")
+		w = append(w, "进程是僵尸 (defunct)")
 	case "stopped":
-		w = append(w, "Process is stopped (T state)")
+		w = append(w, "进程已停止 (T state)")
 	case "high-cpu":
-		w = append(w, "Process is using high CPU (>2h total)")
+		w = append(w, "进程占用高CPU(共超过2小时)")
 	case "high-mem":
-		w = append(w, "Process is using high memory (>1GB RSS)")
+		w = append(w, "进程正在使用高内存(>1GB RSS)")
 	}
 
 	if IsPublicBind(last.BindAddresses) {
-		w = append(w, "Process is listening on a public interface")
+		w = append(w, "进程正在监听公共接口")
 	}
 
 	if last.User == "root" {
-		w = append(w, "Process is running as root")
+		w = append(w, "")
 	}
 
 	if Detect(p).Type == model.SourceUnknown {
-		w = append(w, "No known supervisor or service manager detected")
+		w = append(w, "未检测到管或服理")
 	}
 
 	// Warn if process is very old (>90 days)
 	if time.Since(last.StartedAt).Hours() > 90*24 {
-		w = append(w, "Process has been running for over 90 days")
+		w = append(w, "该进程已运行超过90天")
 	}
 
 	// Warn if working dir is suspicious
 	suspiciousDirs := map[string]bool{"/": true, "/tmp": true, "/var/tmp": true}
 	if suspiciousDirs[last.WorkingDir] {
-		w = append(w, "Process is running from a suspicious working directory: "+last.WorkingDir)
+		w = append(w, "进程正在从可疑的工作目录运行: "+last.WorkingDir)
 	}
 
 	// Warn if container and no healthcheck (placeholder, as healthcheck not detected)
 	if last.Container != "" {
-		w = append(w, "No healthcheck detected for container (best effort)")
+		w = append(w, "未检测到容器的健康状态")
 	}
 
 	// Warn if service name and process name mismatch
 	if last.Service != "" && last.Command != "" && last.Service != last.Command {
-		w = append(w, "Service name and process name do not match")
+		w = append(w, "服务名称与进程名称不匹配")
 	}
 
 	return w

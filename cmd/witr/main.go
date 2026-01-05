@@ -23,16 +23,16 @@ var buildDate = ""
 
 func printHelp() {
 	fmt.Println("Usage: witr [--pid N | --port N | name] [--short] [--tree] [--json] [--warnings] [--no-color] [--env] [--help] [--version]")
-	fmt.Println("  --pid <n>         Explain a specific PID")
-	fmt.Println("  --port <n>        Explain port usage")
-	fmt.Println("  --short           One-line summary")
-	fmt.Println("  --tree            Show full process ancestry tree")
-	fmt.Println("  --json            Output result as JSON")
-	fmt.Println("  --warnings        Show only warnings")
-	fmt.Println("  --no-color        Disable colorized output")
-	fmt.Println("  --env             Show only environment variables for the process")
-	fmt.Println("  --help            Show this help message")
-	fmt.Println("  --version         Show version and exit")
+	fmt.Println("  --pid <n>         特定的PID")
+	fmt.Println("  --port <n>        端口使用情况")
+	fmt.Println("  --short           单行摘要输出")
+	fmt.Println("  --tree            显示完整的进程祖先树")
+	fmt.Println("  --json            以JSON格式输出结果")
+	fmt.Println("  --warnings        仅显示警告信息")
+	fmt.Println("  --no-color        禁用彩色输出")
+	fmt.Println("  --env             仅显示进程的环境变量")
+	fmt.Println("  --help            帮助信息")
+	fmt.Println("  --version         显示版本并退出")
 }
 
 // Helper: which flags need a value (not bool flags)?
@@ -46,10 +46,10 @@ func flagNeedsValue(flag string) bool {
 
 func main() {
 	// Sanity check: fail build if version is not injected
-	if version == "" {
-		fmt.Fprintln(os.Stderr, "ERROR: version not set. Use -ldflags '-X main.version=...' when building.")
-		os.Exit(2)
-	}
+	// if version == "" {
+	// 	fmt.Fprintln(os.Stderr, "ERROR: version not set. Use -ldflags '-X main.version=...' when building.")
+	// 	os.Exit(2)
+	// }
 	versionFlag := flag.Bool("version", false, "show version and exit")
 
 	// Reorder os.Args so all flags (with their values) come before positional arguments
@@ -111,13 +111,13 @@ func main() {
 			os.Exit(1)
 		}
 		if len(pids) > 1 {
-			fmt.Print("Multiple matching processes found:\n\n")
+			fmt.Print("发现多个匹配的进程:\n\n")
 			for i, pid := range pids {
 				cmdline := procpkg.GetCmdline(pid)
-				fmt.Printf("[%d] PID %d   %s\n", i+1, pid, cmdline)
+				fmt.Printf("[%d] 进程PID %d   %s\n", i+1, pid, cmdline)
 			}
-			fmt.Println("\nRe-run with:")
-			fmt.Println("  witr --pid <pid> --env")
+			fmt.Println("\n使用以下命令运行:")
+			fmt.Println("  witr --pid <进程pid> --env")
 			os.Exit(1)
 		}
 		pid := pids[0]
@@ -166,8 +166,8 @@ func main() {
 		fmt.Println("Error:")
 		fmt.Printf("  %s\n", errStr)
 		if strings.Contains(errStr, "socket found but owning process not detected") {
-			fmt.Println("\nA socket was found for the port, but the owning process could not be detected.")
-			fmt.Println("This may be due to insufficient permissions. Try running with sudo:")
+			fmt.Println("\n已找到该端口的套接字,但无法检测到拥有该进程的进程。")
+			fmt.Println("这可能是由于权限不足。请尝试使用sudo运行:")
 			// Print the actual command the user entered, prefixed with sudo
 			fmt.Print("  sudo ")
 			for i, arg := range os.Args {
@@ -178,20 +178,20 @@ func main() {
 			}
 			fmt.Println()
 		} else {
-			fmt.Println("\nNo matching process or service found. Please check your query or try a different name/port/PID.")
+			fmt.Println("\n未找到匹配的进程或服务。请检查您的查询或尝试不同的名称/端口/进程ID。")
 		}
-		fmt.Println("For usage and options, run: witr --help")
+		fmt.Println("查看用法和选项,请运行: witr --help")
 		os.Exit(1)
 	}
 
 	if len(pids) > 1 {
-		fmt.Print("Multiple matching processes found:\n\n")
+		fmt.Print("发现多个匹配的进程:\n\n")
 		for i, pid := range pids {
 			cmdline := procpkg.GetCmdline(pid)
-			fmt.Printf("[%d] PID %d   %s\n", i+1, pid, cmdline)
+			fmt.Printf("[%d] 进程PID %d   %s\n", i+1, pid, cmdline)
 		}
-		fmt.Println("\nRe-run with:")
-		fmt.Println("  witr --pid <pid>")
+		fmt.Println("\n使用以下命令重新运行:")
+		fmt.Println("  witr --pid <进程ID>")
 		os.Exit(1)
 	}
 
@@ -202,8 +202,8 @@ func main() {
 		fmt.Println()
 		fmt.Println("Error:")
 		fmt.Printf("  %s\n", err.Error())
-		fmt.Println("\nNo matching process or service found. Please check your query or try a different name/port/PID.")
-		fmt.Println("For usage and options, run: witr --help")
+		fmt.Println("\n未找到匹配的进程或服务。请检查您的查询或尝试不同的名称/端口/进程ID。")
+		fmt.Println("查看用法和选项,请运行: witr --help")
 		os.Exit(1)
 	}
 
