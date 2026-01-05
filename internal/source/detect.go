@@ -48,13 +48,13 @@ func Warnings(p []model.Process) []string {
 		lastCmd = proc.Command
 	}
 	if restartCount > 5 {
-		w = append(w, "进程或其祖先重启超五次")
+		w = append(w, "进程重启超五次")
 	}
 
 	// Health warnings
 	switch last.Health {
 	case "zombie":
-		w = append(w, "进程是僵尸 (defunct)")
+		w = append(w, "僵尸进程 (defunct)")
 	case "stopped":
 		w = append(w, "进程已停止 (T state)")
 	case "high-cpu":
@@ -68,11 +68,11 @@ func Warnings(p []model.Process) []string {
 	}
 
 	if last.User == "root" {
-		w = append(w, "")
+		w = append(w, "进程以root权限运行")
 	}
 
 	if Detect(p).Type == model.SourceUnknown {
-		w = append(w, "未检测到管或服理")
+		w = append(w, "未检测到已知的监控器或服务管理器")
 	}
 
 	// Warn if process is very old (>90 days)

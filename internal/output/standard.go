@@ -204,15 +204,15 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 	sourceLabel := string(r.Source.Type)
 	if colorEnabled {
 		if r.Source.Name != "" && r.Source.Name != sourceLabel {
-			fmt.Printf("%s源代码%s      : %s (%s)\n", colorCyan, colorReset, r.Source.Name, sourceLabel)
+			fmt.Printf("%s来源%s      : %s (%s)\n", colorCyan, colorReset, r.Source.Name, sourceLabel)
 		} else {
-			fmt.Printf("%s源代码%s      : %s\n", colorCyan, colorReset, sourceLabel)
+			fmt.Printf("%s来源%s      : %s\n", colorCyan, colorReset, sourceLabel)
 		}
 	} else {
 		if r.Source.Name != "" && r.Source.Name != sourceLabel {
-			fmt.Printf("源代码      : %s (%s)\n", r.Source.Name, sourceLabel)
+			fmt.Printf("来源      : %s (%s)\n", r.Source.Name, sourceLabel)
 		} else {
-			fmt.Printf("源代码      : %s\n", sourceLabel)
+			fmt.Printf("来源      : %s\n", sourceLabel)
 		}
 	}
 
@@ -305,16 +305,16 @@ func RenderStandard(r model.Result, colorEnabled bool) {
 	if r.ResourceContext != nil {
 		if r.ResourceContext.PreventsSleep {
 			if colorEnabled {
-				fmt.Printf("%s能耗%s      : %sPreventing system sleep%s\n", colorRed, colorReset, colorDimYellow, colorReset)
+				fmt.Printf("%ssEnergy%s      : %sPreventing system sleep%s\n", colorRed, colorReset, colorDimYellow, colorReset)
 			} else {
-				fmt.Printf("能耗      : Preventing system sleep\n")
+				fmt.Printf("sEnergy      : Preventing system sleep\n")
 			}
 		}
 		if r.ResourceContext.ThermalState != "" {
 			if colorEnabled {
-				fmt.Printf("%s散热状态%s     : %s%s%s\n", colorRed, colorReset, colorDimYellow, r.ResourceContext.ThermalState, colorReset)
+				fmt.Printf("%ssThermal%s     : %s%s%s\n", colorRed, colorReset, colorDimYellow, r.ResourceContext.ThermalState, colorReset)
 			} else {
-				fmt.Printf("散热状态     : %s\n", r.ResourceContext.ThermalState)
+				fmt.Printf("sThermal     : %s\n", r.ResourceContext.ThermalState)
 			}
 		}
 	}

@@ -26,7 +26,7 @@ func printHelp() {
 	fmt.Println("  --pid <n>         特定的PID")
 	fmt.Println("  --port <n>        端口使用情况")
 	fmt.Println("  --short           单行摘要输出")
-	fmt.Println("  --tree            显示完整的进程祖先树")
+	fmt.Println("  --tree            显示完整的进程树")
 	fmt.Println("  --json            以JSON格式输出结果")
 	fmt.Println("  --warnings        仅显示警告信息")
 	fmt.Println("  --no-color        禁用彩色输出")
